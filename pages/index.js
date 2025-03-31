@@ -1,113 +1,216 @@
+import { useState } from "react";
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Head from "next/head";
 
 export default function Home() {
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [showPreview, setShowPreview] = useState(false);
+  
+  // Sample card news data
+  const cardNewsData = [
+    {
+      id: 1,
+      title: "오늘의 주요 뉴스",
+      content: "카드뉴스 첫 번째 페이지입니다. 좌우로 스와이프하여 다음 카드를 확인하세요.",
+      imageUrl: "/placeholder.jpg",
+    },
+    {
+      id: 2,
+      title: "기술 트렌드",
+      content: "최신 기술 트렌드에 대한 소식입니다. AI와 빅데이터가 주목받고 있습니다.",
+      imageUrl: "/placeholder.jpg",
+    },
+    {
+      id: 3,
+      title: "경제 소식",
+      content: "오늘의 경제 동향과 주요 지표에 대한 분석입니다.",
+      imageUrl: "/placeholder.jpg",
+    },
+    {
+      id: 4,
+      title: "건강 정보",
+      content: "건강한 생활을 위한 팁과 정보를 제공합니다.",
+      imageUrl: "/placeholder.jpg",
+    },
+  ];
+  
+  const nextCard = () => {
+    setCurrentCardIndex((prevIndex) => 
+      prevIndex === cardNewsData.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+  
+  const prevCard = () => {
+    setCurrentCardIndex((prevIndex) => 
+      prevIndex === 0 ? cardNewsData.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToCard = (index) => {
+    setCurrentCardIndex(index);
+    setShowPreview(false);
+  };
+
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
+  };
+
+  const currentCard = cardNewsData[currentCardIndex];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/index.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      <Head>
+        <title>Numera Card News</title>
+        <meta name="description" content="Modern card news web application" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+      </Head>
+      
+      <div className="min-h-screen bg-[#f9fafb] font-['Inter',sans-serif]">
+        {/* Navigation */}
+        <nav className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex items-center">
+                <div className="text-xl font-bold text-[#2563eb]">Numera News</div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-[#2563eb]">Home</button>
+                <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-[#2563eb]">About</button>
+                <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-[#2563eb]">Contact</button>
+              </div>
+            </div>
+          </div>
+        </nav>
+        
+        {/* Reverted Hero Section */}
+        <div className="bg-[#2563eb] text-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-4xl font-bold mb-4">Today's Card News</h1>
+            <p className="text-xl opacity-90">Stay informed with our curated news cards</p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto">
+            {/* Card Header with Progress Bar */}
+            <div className="bg-gray-50 px-6 py-4 border-b flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-800">Card {currentCardIndex + 1} of {cardNewsData.length}</h2>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">{Math.round(((currentCardIndex + 1) / cardNewsData.length) * 100)}%</span>
+                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[#2563eb] rounded-full" 
+                    style={{ width: `${((currentCardIndex + 1) / cardNewsData.length) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Card Content */}
+            <div className="p-6">
+              <div className="relative h-64 bg-gray-200 rounded-lg mb-6">
+                {/* Replace with actual image */}
+                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+                  Card Image {currentCardIndex + 1}
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">{currentCard.title}</h3>
+              <p className="text-gray-700 leading-relaxed mb-6">{currentCard.content}</p>
+              
+              {/* Card Navigation */}
+              <div className="flex justify-between items-center pt-4 border-t">
+                <button 
+                  onClick={prevCard}
+                  className="px-5 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium"
+                >
+                  Previous
+                </button>
+                
+                <button
+                  onClick={togglePreview}
+                  className="px-5 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium"
+                >
+                  {showPreview ? "Hide Preview" : "Show Preview"}
+                </button>
+                
+                <button 
+                  onClick={nextCard}
+                  className="px-5 py-2.5 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition font-medium"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+            
+            {/* Preview Section */}
+            {showPreview && (
+              <div className="p-6 border-t bg-gray-50">
+                <h3 className="text-lg font-semibold mb-4">All Cards Preview</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {cardNewsData.map((card, index) => (
+                    <div 
+                      key={card.id}
+                      onClick={() => goToCard(index)}
+                      className={`
+                        cursor-pointer rounded-lg overflow-hidden transition transform hover:scale-105
+                        ${index === currentCardIndex ? 'ring-2 ring-[#2563eb]' : 'hover:shadow-md'}
+                      `}
+                    >
+                      <div className="h-24 bg-gray-200 flex items-center justify-center">
+                        <span className="text-sm font-medium text-gray-500">Card {index + 1}</span>
+                      </div>
+                      <div className="p-3 bg-white">
+                        <h4 className="font-medium text-sm truncate">{card.title}</h4>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+        
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div>
+                <h3 className="text-xl font-bold mb-4">Numera News</h3>
+                <p className="text-gray-400">Delivering the latest news in a modern card format.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-gray-400 hover:text-white transition">Home</a></li>
+                  <li><a href="#" className="text-gray-400 hover:text-white transition">About Us</a></li>
+                  <li><a href="#" className="text-gray-400 hover:text-white transition">Contact</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Subscribe</h3>
+                <p className="text-gray-400 mb-4">Stay updated with our latest news</p>
+                <div className="flex">
+                  <input 
+                    type="email" 
+                    placeholder="Your email" 
+                    className="px-4 py-2 w-full rounded-l-lg focus:outline-none text-gray-900"
+                  />
+                  <button className="bg-[#2563eb] px-4 py-2 rounded-r-lg hover:bg-[#1d4ed8] transition">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+              <p>© 2023 Numera Card News. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </>
   );
 }
